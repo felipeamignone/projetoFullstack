@@ -1,0 +1,45 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("/usuarios/users")
+      .then((r) => {
+        return r.json();
+      })
+      .then((r) => {
+        console.log(r);
+        let html = "";
+        for (let i = 0; i < r.length; i++) {
+          html += `<tr>
+                          <td>${r[i].userEmail}</td>
+                          <td>${r[i].userName}</td>
+                          <td>${r[i].permissionName}</td>
+                          <td>${r[i].userActive ? "SIM" : "NÃO"}</td>
+                          <td>
+                            <a href="/usuarios/alterar/${
+                              r[i].userId
+                            }" class="btn btn-primary"><i class="fas fa-pen"></i>
+                            <a class="btn btn-primary"><i class="fas fa-trash"></i>
+                          </td>
+                      </tr>`;
+        }
+        document.querySelector("#tabelaUsuarios > tbody").innerHTML = html;
+      });
+    console.log("hello world");
+  });
+</script>
+
+<h1>Usuários cadastrados</h1>
+<a class="btn btn-secondary" href="usuarios/cadastrar">Novo Usuário</a>
+
+<div>
+  <h1>Usuários</h1>
+  <table class="table table-striped" id="tabelaUsuarios">
+    <thead>
+      <th>Email</th>
+      <th>Nome</th>
+      <th>Tipo</th>
+      <th>Ativo</th>
+      <th></th>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
