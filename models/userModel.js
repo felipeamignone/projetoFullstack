@@ -140,7 +140,7 @@ class UserModel {
       userEmail: this.#UserEmail,
       userPassword: this.#UserPassword,
       userActive: this.#UserActive,
-      PermissionId: this.#PermissionId,
+      permissionId: this.#PermissionId,
     };
   }
 }

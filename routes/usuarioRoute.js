@@ -9,6 +9,6 @@ router.get('/cadastrar',ctrl.cadastroView);
 router.get('/alterar/:id',ctrl.alterarView);
 router.post('/cadastrar',ctrl.cadastrar);
 router.get('/users', ctrl.getAllUsers);
-router.get('users/:id', ctrl.getUserById);
+router.get('/users/:id', ctrl.getUserById);
 
 export default router;

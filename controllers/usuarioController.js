@@ -25,9 +25,8 @@ class UsuarioController {
   }
 
   async getUserById(req, resp) {
-    console.log(req.params);
     let userModel = new UserModel();
-    let user = await userModel.getUserById(req.params.userId);
+    let user = await userModel.getUserById(req.params.id);
     resp.send(user);
   }
 
@@ -40,7 +39,6 @@ class UsuarioController {
   }
 
   alterarView(req, resp) {
-    console.log(req.params.id);
     resp.render("usuarios/alterar");
   }
 
