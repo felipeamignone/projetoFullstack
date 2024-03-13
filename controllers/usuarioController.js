@@ -7,20 +7,22 @@ class UsuarioController {
     let permissionModel = new PermissionModel();
     let users = await userModel.getAllUsers();
 
-    let usersUpdated = await Promise.all(users.map(async (user) => {
-      const { userName, userEmail, userActive, permissionId, userId } = user;
-      const permissionName = await permissionModel.getPermissionNameById(
-        permissionId
-      );
-      return {
-        userId,
-        userName,
-        userEmail,
-        userActive,
-        permissionId,
-        permissionName
-      };
-    }));
+    let usersUpdated = await Promise.all(
+      users.map(async (user) => {
+        const { userName, userEmail, userActive, permissionId, userId } = user;
+        const permissionName = await permissionModel.getPermissionNameById(
+          permissionId
+        );
+        return {
+          userId,
+          userName,
+          userEmail,
+          userActive,
+          permissionId,
+          permissionName,
+        };
+      })
+    );
     resp.send(usersUpdated);
   }
 
@@ -34,12 +36,16 @@ class UsuarioController {
     resp.render("usuarios/listagem");
   }
 
-  cadastroView(req, resp) {
-    resp.render("usuarios/cadastro");
+  async cadastroView(req, resp) {
+    let permissionModel = new PermissionModel();
+    let permissions = await permissionModel.getAllPermissions();
+    resp.render("usuarios/cadastro", { permissions });
   }
 
-  alterarView(req, resp) {
-    resp.render("usuarios/alterar");
+  async alterarView(req, resp) {
+    let permissionModel = new PermissionModel();
+    let permissions = await permissionModel.getAllPermissions();
+    resp.render("usuarios/alterar", { permissions });
   }
 
   async cadastrar(req, resp) {
@@ -53,11 +59,13 @@ class UsuarioController {
       permission
     );
 
-    const query = await newUser.register();
-
-    if (nome && email && senha && ativo && perfil != "0") {
+    if (name && email && password && permission != "0") {
+      const query = await newUser.register();
       if (query) {
-        resp.render("usuarios/cadastro", { msg: "usuario criado" });
+        resp.send({
+          ok: true,
+          msg: "Usuário criado com sucesso!",
+        });
         return;
       }
       resp.send({
@@ -69,6 +77,64 @@ class UsuarioController {
     resp.send({
       ok: false,
       msg: "Um ou mais campos estão inválidos",
+    });
+  }
+
+  async editar(req, resp) {
+    const id = req.params.id;
+    const { name, email, password, active, permission } = req.body;
+    const newUser = new UserModel(
+      parseInt(id, 10),
+      name,
+      email,
+      password,
+      active,
+      permission
+    );
+
+    if (name && email && password && permission != "0") {
+      const query = await newUser.update();
+      if (query) {
+        resp.send({
+          ok: true,
+          msg: "Usuário editado com sucesso!",
+        });
+        return;
+      }
+      resp.send({
+        ok: false,
+        msg: "Erro ao editar usuário",
+      });
+      return;
+    }
+    resp.send({
+      ok: false,
+      msg: "Um ou mais campos estão inválidos",
+    });
+  }
+
+  async deletar(req, resp) {
+    const id = req.params.id;
+    const newUser = new UserModel(
+      parseInt(id, 10),
+      null,
+      null,
+      null,
+      null,
+      null
+    );
+
+    const query = await newUser.delete();
+    if (query) {
+      resp.send({
+        ok: true,
+        msg: "Usuário deletado com sucesso!",
+      });
+      return;
+    }
+    resp.send({
+      ok: false,
+      msg: "Erro ao deletar usuário",
     });
   }
 }

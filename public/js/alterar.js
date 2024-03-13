@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
   })
     .then((r) => r.json())
     .then((r) => {
-        $("#usuarioNome").val(r.userName);
-        $("#usuarioEmail").val(r.userEmail);
-        $("#usuarioSenha").val(r.userPassword);
-        $("#usuarioTipo").val(r.permissionId);
-        $("#usuarioAtivo").attr("checked", Boolean(r.userActive));
+      $("#usuarioNome").val(r.userName);
+      $("#usuarioEmail").val(r.userEmail);
+      $("#usuarioSenha").val(r.userPassword);
+      $("#usuarioTipo").val(r.permissionId);
+      $("#usuarioAtivo").attr("checked", Boolean(r.userActive));
     });
 
   $("#register-form").on("submit", function (e) {
@@ -30,16 +30,20 @@ document.addEventListener("DOMContentLoaded", function () {
         permission,
       };
 
-      console.log({ obj });
-      fetch("/usuarios/cadastrar", {
-        method: "POST",
+      fetch(`/usuarios/alterar/${id}`, {
+        method: "PUT",
         body: JSON.stringify(obj),
         headers: {
           "Content-Type": "application/json",
         },
       })
         .then((r) => r.json())
-        .then((r) => console.log(r));
+        .then((r) => {
+          alert(r.msg);
+          if (r.ok) {
+            window.location.href = "/usuarios";
+          }
+        });
     }
   });
 

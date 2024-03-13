@@ -133,6 +133,43 @@ class UserModel {
     }
   }
 
+  async update() {
+    try {
+      let sql =
+        "update tb_users set UserName = ?, UserEmail = ?, UserPassword = ?, UserActive = ?, PermissionId = ? where UserId = ?";
+      let values = [
+        this.#UserName,
+        this.#UserEmail,
+        this.#UserPassword,
+        this.#UserActive,
+        this.#PermissionId,
+        this.#UserId
+      ];
+
+      let result = await db.ExecutaComandoNonQuery(sql, values);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async delete() {
+    try {
+      let sql =
+        "delete from tb_users where UserId = ?";
+      let values = [
+        this.#UserId
+      ];
+
+      let result = await db.ExecutaComandoNonQuery(sql, values);
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   toJSON() {
     return {
       userId: this.#UserId,

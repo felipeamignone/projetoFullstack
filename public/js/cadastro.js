@@ -26,7 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       })
         .then((r) => r.json())
-        .then((r) => console.log(r));
+        .then((r) => {
+          alert(r.msg);
+          if (r.ok) {
+            window.location.href = "/usuarios";
+          }
+        });
     }
   });
 
